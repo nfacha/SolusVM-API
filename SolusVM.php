@@ -80,5 +80,32 @@ class SolusVM
         return $r['statusmsg'] === 'Client exists';
     }
 
+    public function create_server($username, $hd, $bw, $template = 'Ubuntu 16.04 x86_64')
+    {
+        $customPayload = [
+            'action' => 'vserver-create',
+            'hostname' => $username . '.com',
+            'username' => $username,
+            'plan' => 'Base',
+            'node' => 'localhost',
+            'type' => 'openvz',
+            'template' => $template,
+            'randomipv4' => true,
+            'ips' => 1,
+//            'custommemory' => $ram,
+            'customdiskspace' => $hd,
+            'custombandwidth' => $bw,
+        ];
+        return $this->executeRequest($customPayload);
+    }
+
+    public function get_node_info($node_id)
+    {
+        $customPayload = [
+            'action' => 'node-statistics',
+            'nodeid' => $node_id
+        ];
+        return $this->executeRequest($customPayload);
+    }
 
 }
