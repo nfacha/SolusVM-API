@@ -80,7 +80,7 @@ class SolusVM
         return $r['statusmsg'] === 'Client exists';
     }
 
-    public function create_server($username, $hd, $bw, $template = 'Ubuntu 16.04 x86_64')
+    public function create_server($username, $hd, $bw, $template = 'ubuntu-16.04-x86_64_network')
     {
         $customPayload = [
             'action' => 'vserver-create',
@@ -104,6 +104,76 @@ class SolusVM
         $customPayload = [
             'action' => 'node-statistics',
             'nodeid' => $node_id
+        ];
+        return $this->executeRequest($customPayload);
+    }
+
+    public function change_server_memory($server_id, $memory)
+    {
+        $customPayload = [
+            'action' => 'vserver-change-memory',
+            'vserverid' => $server_id,
+            'memory' => "32|$memory",
+        ];
+        return $this->executeRequest($customPayload);
+    }
+
+    public function change_bandwidth($server_id, $bandwidth)
+    {
+        $customPayload = [
+            'action' => 'vserver-bandwidth',
+            'vserverid' => $server_id,
+            'limit' => $bandwidth,
+            'overlimit' => $bandwidth,
+        ];
+        return $this->executeRequest($customPayload);
+    }
+
+    public function change_disk($server_id, $disk_space)
+    {
+        $customPayload = [
+            'action' => 'vserver-change-hdd',
+            'vserverid' => $server_id,
+            'hdd' => $disk_space,
+        ];
+        return $this->executeRequest($customPayload);
+    }
+
+    public function change_network_speed($server_id, $network_speed)
+    {
+        $customPayload = [
+            'action' => 'vserver-change-nspeed',
+            'vserverid' => $server_id,
+            'customnspeed' => $network_speed,
+        ];
+        return $this->executeRequest($customPayload);
+    }
+
+    public function get_server_info($server_id)
+    {
+        $customPayload = [
+            'action' => 'vserver-infoall',
+            'vserverid' => $server_id,
+        ];
+        return $this->executeRequest($customPayload);
+    }
+
+    public function terminate_server($server_id)
+    {
+        $customPayload = [
+            'action' => 'vserver-terminate',
+            'deleteclient' => false,
+            'vserverid' => $server_id,
+        ];
+        return $this->executeRequest($customPayload);
+    }
+
+    public function change_root_password($server_id, $root_password)
+    {
+        $customPayload = [
+            'action' => 'vserver-rootpassword',
+            'rootpassword' => $root_password,
+            'vserverid' => $server_id,
         ];
         return $this->executeRequest($customPayload);
     }
