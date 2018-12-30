@@ -178,4 +178,16 @@ class SolusVM
         return $this->executeRequest($customPayload);
     }
 
+    public function serial_console($server_id, $action = null)
+    {
+        $customPayload = [
+            'action' => 'vserver-console',
+            'vserverid' => $server_id,
+        ];
+        if ($action !== null) {
+            $customPayload['access'] = $action;
+        }
+        return $this->executeRequest($customPayload);
+    }
+
 }
